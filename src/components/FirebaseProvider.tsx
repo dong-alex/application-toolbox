@@ -8,7 +8,7 @@ import config from "../config";
 
 import { useAuthState } from "react-firebase-hooks/auth";
 import { MDBBtn } from "mdbreact";
-import { LinkDetails, WorkDetails } from "../types";
+import { LinkBase, LinkDetails, WorkBase, WorkDetails } from "../types";
 
 firebase.initializeApp(config);
 
@@ -45,24 +45,9 @@ const GoogleSignOut: FunctionComponent<{}> = () => {
 const FirebaseProvider = ({ children }: any): JSX.Element => {
   const [user] = useAuthState(auth);
   const userRef = firestore.collection("users");
-  // const query = userRef.doc(user ? user.uid : "");
-  // const [data, loading, error] = useDocument(query);
-
-  const fetchLinks = async () => {
-    if (!user) {
-      return;
-    }
-    const { uid }: { uid: string } = user;
-
-    const userDocument: firebase.firestore.DocumentData = await userRef
-      .doc(uid)
-      .get();
-
-    return userDocument.data();
-  };
 
   // handles adding a link to be able to copy and paste easily
-  const onLinkSubmission = async (details: LinkDetails) => {
+  const onLinkSubmission = async (details: LinkBase) => {
     if (!user) {
       return;
     }
@@ -80,7 +65,51 @@ const FirebaseProvider = ({ children }: any): JSX.Element => {
   };
 
   // handles adding a description to specific work experiences
-  const onWorkSubmission = async (details: WorkDetails) => {};
+  const onWorkSubmission = async (details: WorkBase) => {
+    if (!user) {
+      return;
+    }
+
+    const { uid }: { uid: string } = user;
+
+    await userRef
+      .doc(uid)
+      .collection("experiences")
+      .doc()
+      .set({
+        ...details,
+        endDate: details.current ? null : details.endDate,
+        uid,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+  };
+
+  const onWorkUpdate = async (details: WorkDetails) => {
+    if (!user) {
+      return;
+    }
+
+    const { uid }: { uid: string } = user;
+    const { id }: { id: string } = details;
+    await userRef
+      .doc(uid)
+      .collection("experiences")
+      .doc(id)
+      .update({
+        ...details,
+        endDate: details.current ? null : details.endDate,
+        lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+  };
+
+  const onWorkDelete = async (docId: string) => {
+    if (!user) {
+      return;
+    }
+    const { uid }: { uid: string } = user;
+    await userRef.doc(uid).collection("experiences").doc(docId).delete();
+  };
 
   // handles updating a link submission
   const onLinkUpdate = async (updateDetails: LinkDetails) => {
@@ -112,11 +141,12 @@ const FirebaseProvider = ({ children }: any): JSX.Element => {
       value={{
         user,
         auth,
-        fetchLinks,
         onLinkSubmission,
         onLinkDelete,
         onLinkUpdate,
         onWorkSubmission,
+        onWorkUpdate,
+        onWorkDelete,
       }}
     >
       {children}

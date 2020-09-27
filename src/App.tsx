@@ -1,10 +1,12 @@
 import React, { useEffect, useContext, FunctionComponent } from "react";
 import { MDBContainer } from "mdbreact";
-import NavigationBar from "./components/NavigationBar";
-import DetailsHeader from "./components/DetailsHeader";
-import "./App.css";
-import BasicInformation from "./components/BasicInformation";
 import { FirebaseContext } from "./components/FirebaseProvider";
+import NavigationBar from "./components/NavigationBar";
+import BasicInformation from "./components/BasicInformation";
+import ExperienceSection from "./components/ExperienceSection";
+import GeneralPage from "./components/GeneralPage";
+import FooterPage from "./components/Footer";
+import "./App.css";
 
 const App: FunctionComponent<{}> = () => {
   const { user } = useContext(FirebaseContext);
@@ -12,18 +14,17 @@ const App: FunctionComponent<{}> = () => {
   return (
     <div>
       <NavigationBar />
-      <MDBContainer>
-        {user && (
-          <p>
-            Current user is{" "}
-            <span>
-              {user.displayName} - {user.uid}
-            </span>
-          </p>
+      <MDBContainer className="pb-30">
+        {user ? (
+          <>
+            <BasicInformation />
+            <ExperienceSection />
+          </>
+        ) : (
+          <GeneralPage />
         )}
-
-        <BasicInformation />
       </MDBContainer>
+      <FooterPage />
     </div>
   );
 };
