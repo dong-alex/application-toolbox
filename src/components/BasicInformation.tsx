@@ -265,7 +265,7 @@ const BasicInformation = () => {
                 onChange={handleEditValueChange}
               />
             </MDBCol>
-            <MDBCol xl="5" className="my-3 my-xl-1">
+            <MDBCol xl="5" className="my-3 my-xl-1 px-0 px-xl-3">
               {activeFieldId === link.id ? (
                 <MDBBtnGroup className="w-100">
                   <MDBBtn
