@@ -10,10 +10,13 @@ import {
   MDBBox,
   MDBBtn,
   MDBBtnGroup,
-  MDBContainer,
   MDBIcon,
   MDBInput,
   MDBInputGroup,
+  MDBModal,
+  MDBModalHeader,
+  MDBModalFooter,
+  MDBModalBody,
   MDBPopover,
   MDBPopoverBody,
   MDBPopoverHeader,
@@ -21,11 +24,13 @@ import {
 } from "mdbreact";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { LinkDetails } from "../types";
-import { FirebaseContext, firebase, firestore, auth } from "./FirebaseProvider";
+import { FirebaseContext, firebase, firestore } from "./FirebaseProvider";
 
 // add your information such as linkedin urls and github urls to copy and paste from
 const BasicInformation = () => {
-  const { user, onLinkSubmission, onLinkUpdate } = useContext(FirebaseContext);
+  const { user, onLinkSubmission, onLinkUpdate, onLinkDelete } = useContext(
+    FirebaseContext
+  );
   const [type, setType] = useState<string>("");
   const [url, setURL] = useState<string>("");
   const [links, setLinks] = useState<LinkDetails[]>([]);
@@ -35,6 +40,9 @@ const BasicInformation = () => {
   const [editTypeField, setEditTypeField] = useState<string>("");
 
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  // intermediate delete field
+  const [deleteId, setDeleteId] = useState<string>("");
 
   const resetEditState = () => {
     setActiveFieldId("");
@@ -48,10 +56,6 @@ const BasicInformation = () => {
     setURL("");
     setErrorMessage("");
   };
-
-  useEffect(() => {
-    console.log("Links change!", links);
-  }, [links]);
 
   useEffect(() => {
     if (user) {
@@ -73,6 +77,10 @@ const BasicInformation = () => {
       return () => unsubscribe();
     }
   }, [user]);
+
+  const handleModalOpen = () => {
+    setModalOpen(!modalOpen);
+  };
 
   const handleTypeChange = (event: SyntheticEvent<HTMLSelectElement>) => {
     setType(event.currentTarget.value);
@@ -145,13 +153,29 @@ const BasicInformation = () => {
     }
   };
 
+  const handleDeleteLink = (id: string) => {
+    setModalOpen(true);
+    setDeleteId(id);
+  };
+
+  const handleConfirmDelete = async () => {
+    await onLinkDelete(deleteId);
+    setDeleteId("");
+    setModalOpen(false);
+  };
+
   return (
     <MDBBox className="pb-5 border-bottom border-dark">
-      <MDBBox className="d-flex flex-row mb-3 justify-content-center align-middle">
+      <MDBBox className="d-flex flex-row mt-3 mb-3 justify-content-center align-middle">
         <MDBTypography tag="h2" variant="h2">
           Basic Information
         </MDBTypography>
-        <MDBPopover placement="right" popover data-toggle="popover-hover">
+        <MDBPopover
+          placement="right"
+          popover
+          clickable
+          data-toggle="popover-hover"
+        >
           <MDBBtn color="primary" size="sm" className="ml-3">
             <MDBIcon icon="question" />
           </MDBBtn>
@@ -287,6 +311,17 @@ const BasicInformation = () => {
                         Copy
                       </MDBBtn>
                     </CopyToClipboard>
+                    <MDBBtn
+                      rounded
+                      color="red"
+                      onClick={() => {
+                        handleDeleteLink(link.id);
+                      }}
+                      className="m-0"
+                    >
+                      <MDBIcon icon="trash" className="mr-1" />
+                      Delete
+                    </MDBBtn>
                   </MDBBtnGroup>
                 )
               }
@@ -294,6 +329,32 @@ const BasicInformation = () => {
           </MDBBox>
         );
       })}
+      <MDBModal
+        isOpen={modalOpen}
+        toggle={handleModalOpen}
+        backdrop
+        centered
+        noClickableBodyWithoutBackdrop
+        overflowScroll={false}
+        inline={false}
+      >
+        <MDBModalHeader toggle={handleModalOpen}>Confirm Delete</MDBModalHeader>
+        <MDBModalBody>Are you sure you want to delete this link?</MDBModalBody>
+        <MDBModalFooter>
+          <MDBBtn
+            color="blue"
+            onClick={() => {
+              setModalOpen(false);
+              setDeleteId("");
+            }}
+          >
+            No
+          </MDBBtn>
+          <MDBBtn color="danger" onClick={handleConfirmDelete}>
+            Yes
+          </MDBBtn>
+        </MDBModalFooter>
+      </MDBModal>
     </MDBBox>
   );
 };
