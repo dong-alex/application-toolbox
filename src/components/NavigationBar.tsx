@@ -13,9 +13,6 @@ const NavbarPage: FunctionComponent<{}> = () => {
   return (
     <Router>
       <MDBNavbar color="black" dark expand="md">
-        <MDBNavbarBrand>
-          <strong className="white-text text-monospace">Toolbox</strong>
-        </MDBNavbarBrand>
         <MDBNavbarNav right>
           <MDBNavItem>
             {auth.currentUser ? <GoogleSignOut /> : <GoogleSignIn />}
