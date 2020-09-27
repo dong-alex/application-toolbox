@@ -12,7 +12,6 @@ const App: FunctionComponent<{}> = () => {
   return (
     <div>
       <NavigationBar />
-      <DetailsHeader />
       <MDBContainer>
         {user && (
           <p>

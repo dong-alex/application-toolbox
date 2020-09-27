@@ -14,6 +14,10 @@ import {
   MDBIcon,
   MDBInput,
   MDBInputGroup,
+  MDBPopover,
+  MDBPopoverBody,
+  MDBPopoverHeader,
+  MDBTypography,
 } from "mdbreact";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { LinkDetails } from "../types";
@@ -142,12 +146,30 @@ const BasicInformation = () => {
   };
 
   return (
-    <>
+    <MDBBox className="pb-5 border-bottom border-dark">
+      <MDBBox className="d-flex flex-row mb-3 justify-content-center align-middle">
+        <MDBTypography tag="h2" variant="h2">
+          Basic Information
+        </MDBTypography>
+        <MDBPopover placement="right" popover data-toggle="popover-hover">
+          <MDBBtn color="primary" size="sm" className="ml-3">
+            <MDBIcon icon="question" />
+          </MDBBtn>
+          <div>
+            <MDBPopoverHeader>What is this?</MDBPopoverHeader>
+            <MDBPopoverBody>
+              Save your frequently used links such as your Github and LinkedIn
+              to apply to job applications without have multiple tabs opened.
+            </MDBPopoverBody>
+          </div>
+        </MDBPopover>
+      </MDBBox>
       <MDBInputGroup
-        id="label-url-submission"
-        prepend="Label and URL"
+        id="type-url-submission"
+        prepend="Type and URL"
+        containerClassName="d-flex justify-content-center mb-3"
         inputs={
-          <div className="d-flex">
+          <div className="d-flex align-middle">
             <select
               className="browser-default custom-select w-auto"
               onChange={handleTypeChange}
@@ -272,7 +294,7 @@ const BasicInformation = () => {
           </MDBBox>
         );
       })}
-    </>
+    </MDBBox>
   );
 };
 
