@@ -21,6 +21,8 @@ import {
   MDBPopoverBody,
   MDBPopoverHeader,
   MDBTypography,
+  MDBRow,
+  MDBCol,
 } from "mdbreact";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { LinkDetails } from "../types";
@@ -166,7 +168,7 @@ const BasicInformation = () => {
 
   return (
     <MDBBox className="pb-5 border-bottom border-dark">
-      <MDBBox className="d-flex flex-row mt-3 mb-3 justify-content-center align-middle">
+      <MDBBox className="d-flex flex-row mt-3 justify-content-center align-middle">
         <MDBTypography tag="h2" variant="h2">
           Basic Information
         </MDBTypography>
@@ -188,40 +190,38 @@ const BasicInformation = () => {
           </div>
         </MDBPopover>
       </MDBBox>
-      <MDBInputGroup
-        id="type-url-submission"
-        prepend="Type and URL"
-        containerClassName="d-flex justify-content-center mb-3"
-        inputs={
-          <div className="d-flex align-middle">
-            <select
-              className="browser-default custom-select w-auto"
-              onChange={handleTypeChange}
-            >
-              <option>Choose your option</option>
-              <option value="Github">Github</option>
-              <option value="LinkedIn">LinkedIn</option>
-              <option value="Personal Website">Personal Website</option>
-            </select>
-            <MDBInput
-              noTag
-              type="text"
-              value={url}
-              onChange={handleUrlChange}
-              hint="Description"
-            />
-          </div>
-        }
-        append={
+      <MDBRow className="my-3">
+        <MDBCol md="4" className="px-md-0">
+          <select
+            className="browser-default custom-select"
+            onChange={handleTypeChange}
+          >
+            <option>Choose Website</option>
+            <option value="Github">Github</option>
+            <option value="LinkedIn">LinkedIn</option>
+            <option value="Personal Website">Personal Website</option>
+          </select>
+        </MDBCol>
+        <MDBCol md="4" className="px-md-0">
+          <MDBInput
+            noTag
+            type="text"
+            value={url}
+            onChange={handleUrlChange}
+            hint="URL"
+            className=""
+          />
+        </MDBCol>
+        <MDBCol md="4" className="px-md-0">
           <MDBBtn
             color="blue"
-            className="m-0 px-3 py-2 z-depth-0"
+            className="m-0 px-2 py-2 w-100"
             onClick={handleSubmit}
           >
             Add
           </MDBBtn>
-        }
-      />
+        </MDBCol>
+      </MDBRow>
       {errorMessage !== "" && (
         <MDBAlert
           color="danger"
@@ -236,97 +236,96 @@ const BasicInformation = () => {
       )}
       {links.map((link: LinkDetails) => {
         return (
-          <MDBBox key={link.id} className="d-flex flex-row p-0 mt-2">
-            <MDBInputGroup
-              prepend={
-                activeFieldId !== link.id ? (
-                  link.type
-                ) : (
-                  <select
-                    className="browser-default custom-select h-100"
-                    onChange={handleEditTypeChange}
-                    value={
-                      activeFieldId !== link.id ? link.type : editTypeField
-                    }
+          <MDBRow key={link.id} className="d-flex flex-row p-0 mt-2">
+            <MDBCol
+              xl="2"
+              className="d-lg-flex flex-lg-column justify-content-lg-center text-left px-md-0"
+            >
+              {activeFieldId !== link.id ? (
+                link.type
+              ) : (
+                <select
+                  className="browser-default custom-select h-100"
+                  onChange={handleEditTypeChange}
+                  value={activeFieldId !== link.id ? link.type : editTypeField}
+                >
+                  <option value="Github">Github</option>
+                  <option value="LinkedIn">LinkedIn</option>
+                  <option value="Personal Website">Personal Website</option>
+                </select>
+              )}
+            </MDBCol>
+            <MDBCol xl="5" className="px-md-0">
+              <MDBInput
+                noTag
+                type="text"
+                className="h-100"
+                value={activeFieldId !== link.id ? link.url : editURLField}
+                disabled={activeFieldId !== link.id}
+                onChange={handleEditValueChange}
+              />
+            </MDBCol>
+            <MDBCol xl="5" className="my-3 my-xl-1">
+              {activeFieldId === link.id ? (
+                <MDBBtnGroup className="w-100">
+                  <MDBBtn
+                    className="m-0"
+                    color="red"
+                    onClick={handleEditCancel}
                   >
-                    <option value="Github">Github</option>
-                    <option value="LinkedIn">LinkedIn</option>
-                    <option value="Personal Website">Personal Website</option>
-                  </select>
-                )
-              }
-              inputs={
-                <MDBInput
-                  noTag
-                  type="text"
-                  className="h-100"
-                  value={activeFieldId !== link.id ? link.url : editURLField}
-                  disabled={activeFieldId !== link.id}
-                  onChange={handleEditValueChange}
-                />
-              }
-              append={
-                activeFieldId === link.id ? (
-                  <MDBBtnGroup>
-                    <MDBBtn
-                      className="m-0"
-                      color="red"
-                      onClick={handleEditCancel}
-                    >
-                      <MDBIcon icon="ban" className="mr-1" />
-                      Undo
+                    <MDBIcon icon="ban" className="mr-1" />
+                    Undo
+                  </MDBBtn>
+                  <MDBBtn
+                    className="m-0"
+                    color="blue"
+                    onClick={() => {
+                      handleSaveLink(link.id);
+                    }}
+                  >
+                    <MDBIcon icon="save" className="mr-1" />
+                    Save
+                  </MDBBtn>
+                </MDBBtnGroup>
+              ) : (
+                <MDBBtnGroup className="w-100">
+                  <MDBBtn
+                    rounded
+                    color="green"
+                    onClick={() => {
+                      handleEditClick(link.id, link.url, link.type);
+                    }}
+                    className="m-0"
+                  >
+                    <MDBIcon icon="edit" className="mr-1" />
+                    Edit
+                  </MDBBtn>
+                  <CopyToClipboard
+                    text={link.url}
+                    onCopy={() => {
+                      console.log("Copied", link.url);
+                    }}
+                  >
+                    <MDBBtn rounded color="light-blue" className="m-0">
+                      <MDBIcon icon="copy" className="mr-1" />
+                      Copy
                     </MDBBtn>
-                    <MDBBtn
-                      className="m-0"
-                      color="blue"
-                      onClick={() => {
-                        handleSaveLink(link.id);
-                      }}
-                    >
-                      <MDBIcon icon="save" className="mr-1" />
-                      Save
-                    </MDBBtn>
-                  </MDBBtnGroup>
-                ) : (
-                  <MDBBtnGroup>
-                    <MDBBtn
-                      rounded
-                      color="green"
-                      onClick={() => {
-                        handleEditClick(link.id, link.url, link.type);
-                      }}
-                      className="m-0"
-                    >
-                      <MDBIcon icon="edit" className="mr-1" />
-                      Edit
-                    </MDBBtn>
-                    <CopyToClipboard
-                      text={link.url}
-                      onCopy={() => {
-                        console.log("Copied", link.url);
-                      }}
-                    >
-                      <MDBBtn rounded color="light-blue" className="m-0">
-                        <MDBIcon icon="copy" className="mr-1" />
-                        Copy
-                      </MDBBtn>
-                    </CopyToClipboard>
-                    <MDBBtn
-                      rounded
-                      color="red"
-                      onClick={() => {
-                        handleDeleteLink(link.id);
-                      }}
-                      className="m-0"
-                    >
-                      <MDBIcon icon="trash" className="mr-1" />
-                      Delete
-                    </MDBBtn>
-                  </MDBBtnGroup>
-                )
-              }
-            />
-          </MDBBox>
+                  </CopyToClipboard>
+                  <MDBBtn
+                    rounded
+                    color="red"
+                    onClick={() => {
+                      handleDeleteLink(link.id);
+                    }}
+                    className="m-0"
+                  >
+                    <MDBIcon icon="trash" className="mr-1" />
+                    Delete
+                  </MDBBtn>
+                </MDBBtnGroup>
+              )}
+            </MDBCol>
+          </MDBRow>
         );
       })}
       <MDBModal
