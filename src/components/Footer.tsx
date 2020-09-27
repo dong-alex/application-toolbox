@@ -11,7 +11,7 @@ import {
 
 const FooterPage = () => {
   return (
-    <MDBFooter color="black" className="font-small pt-4 mt-4">
+    <MDBFooter color="black" className="font-small pt-4 mt-4 fixed-bottom">
       <MDBContainer fluid className="text-center text-md-left">
         <MDBRow>
           <MDBCol md="12" className="text-center">
