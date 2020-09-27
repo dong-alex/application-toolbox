@@ -15,7 +15,7 @@ firebase.initializeApp(config);
 // export the references in case they will be used
 const auth = firebase.auth();
 const firestore = firebase.firestore();
-const analytics = firebase.analytics();
+// const analytics = firebase.analytics();
 
 const FirebaseContext: Context<any> = createContext(null);
 

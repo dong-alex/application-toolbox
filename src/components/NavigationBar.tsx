@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useContext } from "react";
-import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem } from "mdbreact";
+import { MDBNavbar, MDBNavbarNav, MDBNavItem } from "mdbreact";
 import { BrowserRouter as Router } from "react-router-dom";
 import {
   FirebaseContext,

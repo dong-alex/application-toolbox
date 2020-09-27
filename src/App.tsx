@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, FunctionComponent } from "react";
+import React, { useContext, FunctionComponent } from "react";
 import { MDBContainer } from "mdbreact";
 import { FirebaseContext } from "./components/FirebaseProvider";
 import NavigationBar from "./components/NavigationBar";
