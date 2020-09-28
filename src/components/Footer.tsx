@@ -4,7 +4,6 @@ import {
   MDBContainer,
   MDBRow,
   MDBFooter,
-  MDBTypography,
   MDBIcon,
   MDBBtn,
 } from "mdbreact";
@@ -19,12 +18,6 @@ const FooterPage = () => {
       <MDBContainer fluid className="text-center text-md-left">
         <MDBRow>
           <MDBCol md="12" className="text-center">
-            <MDBTypography tag="p">
-              The project is currently not suitable to take in open source
-              contributions. In the future, if the current Google Firestore
-              configuration is more suited for open development. Please visit
-              the github repo if you are curious about the code.
-            </MDBTypography>
             <a
               href="https://github.com/dong-alex/application-toolbox"
               target="_blank"

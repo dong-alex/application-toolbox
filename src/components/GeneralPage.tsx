@@ -4,11 +4,7 @@ import React, { FunctionComponent } from "react";
 const GeneralPage: FunctionComponent<{}> = () => {
   return (
     <MDBBox>
-      <MDBTypography
-        tag="h1"
-        variant="h1"
-        className="text-monospace text-center mt-3 mb-3"
-      >
+      <MDBTypography tag="h1" variant="h1" className="text-center mt-3 mb-3">
         Job Toolbox
       </MDBTypography>
       <MDBTypography tag="h2" variant="h2">
