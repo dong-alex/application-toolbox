@@ -210,6 +210,7 @@ const ExperienceSection: FunctionComponent<{}> = () => {
           startDate,
           endDate,
           current,
+          position,
         }: WorkDetails) => {
           return (
             <MDBBox key={id} className="d-flex flex-column mt-2 mb-5">
