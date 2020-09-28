@@ -6,7 +6,7 @@ import {
   MDBModalFooter,
   MDBBtn,
 } from "mdbreact";
-import { InformationModalProps } from "../types";
+import { InformationModalProps } from "../../types";
 
 const InformationModal: FunctionComponent<InformationModalProps> = ({
   open,

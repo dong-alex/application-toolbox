@@ -15,11 +15,11 @@ import {
   MDBCol,
 } from "mdbreact";
 import CopyToClipboard from "react-copy-to-clipboard";
+import { FirebaseContext, firebase, firestore } from "../FirebaseProvider";
 import InformationHeader from "./InformationHeader";
 import InformationForm from "./InformationForm";
-import { LinkDetails } from "../types";
-import { FirebaseContext, firebase, firestore } from "./FirebaseProvider";
 import InformationModal from "./InformationModal";
+import { LinkDetails } from "../../types";
 
 // add your information such as linkedin urls and github urls to copy and paste from
 const BasicInformation = () => {

@@ -2,7 +2,7 @@ import React, { useContext, FunctionComponent } from "react";
 import { MDBBox, MDBContainer } from "mdbreact";
 import { FirebaseContext } from "./components/FirebaseProvider";
 import NavigationBar from "./components/NavigationBar";
-import BasicInformation from "./components/BasicInformation";
+import BasicInformation from "./components/information/BasicInformation";
 import ExperienceSection from "./components/experience/ExperienceSection";
 import GeneralPage from "./components/GeneralPage";
 import FooterPage from "./components/Footer";

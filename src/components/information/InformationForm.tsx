@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { MDBRow, MDBCol, MDBInput, MDBBtn } from "mdbreact";
-import { InformationFormProps } from "../types";
+import { InformationFormProps } from "../../types";
 
 const InformationForm: FunctionComponent<InformationFormProps> = ({
   url,
