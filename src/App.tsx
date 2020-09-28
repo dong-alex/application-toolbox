@@ -22,7 +22,7 @@ const App: FunctionComponent<{}> = () => {
   ) : (
     <div>
       <NavigationBar />
-      <MDBContainer className="pb-30">
+      <MDBContainer className="pb-30" style={{ minHeight: "100vh" }}>
         {user ? (
           <>
             <BasicInformation />
