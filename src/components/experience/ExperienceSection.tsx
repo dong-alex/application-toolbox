@@ -5,30 +5,15 @@ import React, {
   FunctionComponent,
   FormEvent,
 } from "react";
-import {
-  MDBBox,
-  MDBTypography,
-  MDBPopover,
-  MDBBtn,
-  MDBIcon,
-  MDBPopoverHeader,
-  MDBPopoverBody,
-  MDBInput,
-  MDBInputGroup,
-  MDBBtnGroup,
-  MDBCard,
-  MDBCardBody,
-  MDBCollapse,
-  MDBModal,
-  MDBModalBody,
-  MDBModalFooter,
-  MDBModalHeader,
-} from "mdbreact";
-import "react-datepicker/dist/react-datepicker.css";
+import { MDBBox, MDBBtn, MDBIcon, MDBInput, MDBRow, MDBCol } from "mdbreact";
 import DatePicker from "react-datepicker";
-import { WorkBase, WorkDetails } from "../types";
-import { FirebaseContext, firestore } from "./FirebaseProvider";
+import { WorkBase, WorkDetails } from "../../types";
+import { FirebaseContext, firestore } from "../FirebaseProvider";
 import CopyToClipboard from "react-copy-to-clipboard";
+import ExperienceHeader from "./ExperienceHeader";
+import AddExperienceSection from "./AddExperienceSection";
+import ExperienceModal from "./ExperienceModal";
+import "react-datepicker/dist/react-datepicker.css";
 
 const defaultState: WorkDetails = {
   id: "",
@@ -188,107 +173,35 @@ const ExperienceSection: FunctionComponent<{}> = () => {
     setModalOpen(false);
   };
 
+  const handleOpenAddExperience = () => {
+    setOpenAdd(!openAdd);
+  };
+
+  const handleCancelDelete = () => {
+    setModalOpen(false);
+    setDeleteId("");
+  };
+
   return (
     <MDBBox className="d-flex flex-column">
-      <MDBBox className="d-flex flex-row mt-3 mb-3 justify-content-center align-middle">
-        <MDBTypography tag="h2" variant="h2">
-          Work Experiences
-        </MDBTypography>
-        <MDBPopover
-          placement="right"
-          popover
-          data-toggle="popover-hover"
-          clickable
-        >
-          <MDBBtn color="primary" size="sm" className="ml-3">
-            <MDBIcon icon="question" />
-          </MDBBtn>
-          <div>
-            <MDBPopoverHeader>What is this?</MDBPopoverHeader>
-            <MDBPopoverBody>
-              Save your work experiences to reference to depending on the
-              application platform.
-            </MDBPopoverBody>
-          </div>
-        </MDBPopover>
-      </MDBBox>
-      <MDBBtn color="primary" onClick={() => setOpenAdd(!openAdd)}>
-        Add New Experience
-      </MDBBtn>
-      <MDBCard className="mt-3 mb-3">
-        <MDBCollapse id="collapse1" isOpen={openAdd}>
-          <MDBCardBody>
-            <MDBTypography tag="h2" variant="h2">
-              Add Experience
-            </MDBTypography>
-            <MDBInput
-              noTag
-              type="text"
-              value={company}
-              onChange={handleCompanyChange}
-              hint="Company"
-            />
-            <MDBInput
-              noTag
-              type="text"
-              value={position}
-              onChange={handlePositionChange}
-              hint="Position"
-            />
-            <MDBBox className="align-middle mt-3">
-              <label className="mr-3">Current?</label>
-              <input
-                type="checkbox"
-                checked={isCurrent}
-                onChange={handleCurrentChange}
-              />
-            </MDBBox>
-            <MDBBox className="d-inline-flex flex-row mt-3 mb-3">
-              <MDBBox className="d-flex flex-column mr-3">
-                <label className="mr-3">Start Date:</label>
-                <DatePicker
-                  showYearDropdown
-                  dateFormat="MM/dd/yyyy"
-                  selected={startDate}
-                  onChange={handleStartDateChange}
-                />
-              </MDBBox>
-              <MDBBox className="d-flex flex-column">
-                <label className="mr-3">End Date:</label>
-                <DatePicker
-                  disabled={isCurrent}
-                  dateFormat="MM/dd/yyyy"
-                  showYearDropdown
-                  selected={endDate}
-                  onChange={handleEndDateChange}
-                />
-              </MDBBox>
-            </MDBBox>
-            <label>Work Description</label>
-            <MDBBox className="d-flex flex-row">
-              <div className="input-group-prepend">
-                <span className="input-group-text" id="basic-addon">
-                  <i className="fas fa-pencil-alt prefix"></i>
-                </span>
-              </div>
-              <textarea
-                className="form-control"
-                rows={7}
-                value={textDescription}
-                onChange={handleDescriptionChange}
-                placeholder="Enter in point form or text description"
-              />
-            </MDBBox>
-            <MDBBtn
-              className="mt-3 ml-0 mr-0"
-              color="primary"
-              onClick={handleSubmitClick}
-            >
-              Add Work Experience
-            </MDBBtn>
-          </MDBCardBody>
-        </MDBCollapse>
-      </MDBCard>
+      <ExperienceHeader />
+      <AddExperienceSection
+        open={openAdd}
+        company={company}
+        position={position}
+        isCurrent={isCurrent}
+        startDate={startDate}
+        endDate={endDate}
+        textDescription={textDescription}
+        onOpenAddExperience={handleOpenAddExperience}
+        onCompanyChange={handleCompanyChange}
+        onPositionChange={handlePositionChange}
+        onCurrentChange={handleCurrentChange}
+        onStartDateChange={handleStartDateChange}
+        onEndDateChange={handleEndDateChange}
+        onDescriptionChange={handleDescriptionChange}
+        onSubmitClick={handleSubmitClick}
+      />
       {experiences.map(
         ({
           id,
@@ -299,11 +212,9 @@ const ExperienceSection: FunctionComponent<{}> = () => {
           current,
         }: WorkDetails) => {
           return (
-            <MDBBox key={id} className="d-flex flex-column p-0 mt-2 mb-5">
-              <MDBInputGroup
-                prepend={"Company"}
-                containerClassName="mb-3"
-                inputs={
+            <MDBBox key={id} className="d-flex flex-column mt-2 mb-5">
+              <MDBRow className="my-2">
+                <MDBCol lg="8" className="px-1">
                   <MDBInput
                     noTag
                     type="text"
@@ -313,10 +224,10 @@ const ExperienceSection: FunctionComponent<{}> = () => {
                     disabled={activeFieldId !== id}
                     onChange={handleEditChange}
                   />
-                }
-                append={
-                  activeFieldId === id ? (
-                    <MDBBtnGroup>
+                </MDBCol>
+                <MDBCol lg="4" className="px-1">
+                  {activeFieldId === id ? (
+                    <div className="d-flex justify-content-around w-100">
                       <MDBBtn
                         className="m-0"
                         color="red"
@@ -333,9 +244,9 @@ const ExperienceSection: FunctionComponent<{}> = () => {
                         <MDBIcon icon="save" className="mr-1" />
                         Save
                       </MDBBtn>
-                    </MDBBtnGroup>
+                    </div>
                   ) : (
-                    <MDBBtnGroup>
+                    <div className="d-flex justify-content-around w-100">
                       <MDBBtn
                         rounded
                         color="green"
@@ -366,48 +277,54 @@ const ExperienceSection: FunctionComponent<{}> = () => {
                         <MDBIcon icon="trash" className="mr-1" />
                         Delete
                       </MDBBtn>
-                    </MDBBtnGroup>
-                  )
-                }
-              />
-              <MDBBox className="mb-3 d-flex align-middle">
-                <div className="mr-3">
-                  <label className="mr-3">Start Date:</label>
-                  <DatePicker
-                    showYearDropdown
-                    dateFormat="MM/dd/yyyy"
-                    maxDate={activeFieldId !== id ? endDate : editState.endDate}
-                    selected={
-                      activeFieldId !== id ? startDate : editState.startDate
-                    }
-                    onChange={(date) => {
-                      let newDate = date as Date;
-                      setEditState({ ...editState, startDate: newDate });
-                    }}
-                    disabled={activeFieldId !== id}
-                  />
-                </div>
-                <div>
-                  <label className="mr-3">End Date:</label>
-                  <DatePicker
-                    showYearDropdown
-                    dateFormat="MM/dd/yyyy"
-                    minDate={
-                      activeFieldId !== id ? startDate : editState.startDate
-                    }
-                    selected={
-                      activeFieldId !== id ? endDate : editState.endDate
-                    }
-                    onChange={(date) => {
-                      let newDate = date as Date;
-                      setEditState({ ...editState, endDate: newDate });
-                    }}
-                    disabled={
-                      activeFieldId !== id || (editState && editState.current)
-                    }
-                  />
-                </div>
-              </MDBBox>
+                    </div>
+                  )}
+                </MDBCol>
+              </MDBRow>
+              <MDBRow className="my-3 d-flex align-middle">
+                <MDBCol>
+                  <div className="mr-3">
+                    <label className="mr-3">Start Date:</label>
+                    <DatePicker
+                      showYearDropdown
+                      dateFormat="MM/dd/yyyy"
+                      maxDate={
+                        activeFieldId !== id ? endDate : editState.endDate
+                      }
+                      selected={
+                        activeFieldId !== id ? startDate : editState.startDate
+                      }
+                      onChange={(date) => {
+                        let newDate = date as Date;
+                        setEditState({ ...editState, startDate: newDate });
+                      }}
+                      disabled={activeFieldId !== id}
+                    />
+                  </div>
+                </MDBCol>
+                <MDBCol>
+                  <div>
+                    <label className="mr-3">End Date:</label>
+                    <DatePicker
+                      showYearDropdown
+                      dateFormat="MM/dd/yyyy"
+                      minDate={
+                        activeFieldId !== id ? startDate : editState.startDate
+                      }
+                      selected={
+                        activeFieldId !== id ? endDate : editState.endDate
+                      }
+                      onChange={(date) => {
+                        let newDate = date as Date;
+                        setEditState({ ...editState, endDate: newDate });
+                      }}
+                      disabled={
+                        activeFieldId !== id || (editState && editState.current)
+                      }
+                    />
+                  </div>
+                </MDBCol>
+              </MDBRow>
               <MDBInput
                 noTag
                 type="text"
@@ -460,34 +377,12 @@ const ExperienceSection: FunctionComponent<{}> = () => {
           );
         }
       )}
-      <MDBModal
-        isOpen={modalOpen}
-        toggle={handleModalOpen}
-        backdrop
-        centered
-        noClickableBodyWithoutBackdrop
-        overflowScroll={false}
-        inline={false}
-      >
-        <MDBModalHeader toggle={handleModalOpen}>Confirm Delete</MDBModalHeader>
-        <MDBModalBody>
-          Are you sure you want to delete this work experience entry?
-        </MDBModalBody>
-        <MDBModalFooter>
-          <MDBBtn
-            color="blue"
-            onClick={() => {
-              setModalOpen(false);
-              setDeleteId("");
-            }}
-          >
-            No
-          </MDBBtn>
-          <MDBBtn color="danger" onClick={handleConfirmDelete}>
-            Yes
-          </MDBBtn>
-        </MDBModalFooter>
-      </MDBModal>
+      <ExperienceModal
+        open={modalOpen}
+        onModalOpen={handleModalOpen}
+        onCancelDelete={handleCancelDelete}
+        onConfirmDelete={handleConfirmDelete}
+      />
     </MDBBox>
   );
 };

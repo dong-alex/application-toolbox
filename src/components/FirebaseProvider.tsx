@@ -43,7 +43,7 @@ const GoogleSignOut: FunctionComponent<{}> = () => {
 };
 
 const FirebaseProvider = ({ children }: any): JSX.Element => {
-  const [user] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
   const userRef = firestore.collection("users");
 
   // handles adding a link to be able to copy and paste easily
@@ -141,6 +141,7 @@ const FirebaseProvider = ({ children }: any): JSX.Element => {
       value={{
         user,
         auth,
+        loading,
         onLinkSubmission,
         onLinkDelete,
         onLinkUpdate,
