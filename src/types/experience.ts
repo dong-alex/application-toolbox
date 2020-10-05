@@ -2,20 +2,9 @@ import { FormEvent } from "react";
 
 export type AddExperienceProps = {
   open: boolean;
-  company: string;
-  position: string;
-  isCurrent: boolean;
-  startDate: Date;
-  endDate: Date | null;
-  textDescription: string;
+  initialValues: ExperienceFormValues;
   onOpenAddExperience: () => void;
-  onCompanyChange: (event: FormEvent<HTMLInputElement>) => void;
-  onPositionChange: (event: FormEvent<HTMLInputElement>) => void;
-  onCurrentChange: () => void;
-  onStartDateChange: (date: Date) => void;
-  onEndDateChange: (date: Date) => void;
-  onDescriptionChange: (event: FormEvent<HTMLTextAreaElement>) => void;
-  onSubmitClick: (event: FormEvent<HTMLButtonElement>) => Promise<void>;
+  onSubmitClick: (values: ExperienceFormValues) => Promise<void>;
 };
 
 export type ExperienceModalProps = {
@@ -24,3 +13,12 @@ export type ExperienceModalProps = {
   onCancelDelete: () => void;
   onConfirmDelete: () => Promise<void>;
 };
+
+export interface ExperienceFormValues {
+  company: string;
+  position: string;
+  startDate: Date;
+  endDate: Date;
+  current: boolean;
+  description: string;
+}

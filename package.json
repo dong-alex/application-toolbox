@@ -14,6 +14,7 @@
     "@types/react-dom": "^16.9.0",
     "@types/react-router-dom": "^5.1.5",
     "firebase": "^7.21.1",
+    "formik": "^2.1.7",
     "mdbreact": "^4.27.0",
     "react": "^16.13.1",
     "react-copy-to-clipboard": "^5.0.2",

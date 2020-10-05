@@ -8,24 +8,14 @@ import {
   MDBInput,
   MDBBox,
 } from "mdbreact";
-import { AddExperienceProps } from "../../types";
+import { AddExperienceProps, ExperienceFormValues } from "../../types";
+import { Field, FieldInputProps, Form, Formik } from "formik";
 
 const AddExperienceSection: FunctionComponent<AddExperienceProps> = ({
   onOpenAddExperience,
   open,
-  onCompanyChange,
-  onPositionChange,
-  onCurrentChange,
-  onStartDateChange,
-  onEndDateChange,
-  onDescriptionChange,
+  initialValues,
   onSubmitClick,
-  company,
-  position,
-  isCurrent,
-  startDate,
-  endDate,
-  textDescription,
 }) => {
   return (
     <>
@@ -35,70 +25,97 @@ const AddExperienceSection: FunctionComponent<AddExperienceProps> = ({
       <MDBCard className="mt-3 mb-3">
         <MDBCollapse id="collapse1" isOpen={open}>
           <MDBCardBody>
-            <MDBInput
-              noTag
-              type="text"
-              value={company}
-              onChange={onCompanyChange}
-              hint="Company"
-            />
-            <MDBInput
-              noTag
-              type="text"
-              value={position}
-              onChange={onPositionChange}
-              hint="Position"
-            />
-            <MDBBox className="align-middle mt-3">
-              <label className="mr-3">Current?</label>
-              <input
-                type="checkbox"
-                checked={isCurrent}
-                onChange={onCurrentChange}
-              />
-            </MDBBox>
-            <MDBBox className="d-inline-flex flex-column flex-md-row my-3">
-              <MDBBox className="d-flex flex-column mr-3">
-                <label className="mr-3">Start Date:</label>
-                <DatePicker
-                  showYearDropdown
-                  dateFormat="MM/dd/yyyy"
-                  selected={startDate}
-                  onChange={onStartDateChange}
-                />
-              </MDBBox>
-              <MDBBox className="d-flex flex-column">
-                <label className="mr-3">End Date:</label>
-                <DatePicker
-                  disabled={isCurrent}
-                  dateFormat="MM/dd/yyyy"
-                  showYearDropdown
-                  selected={endDate}
-                  onChange={onEndDateChange}
-                />
-              </MDBBox>
-            </MDBBox>
-            <MDBBox className="d-flex flex-row">
-              <div className="input-group-prepend">
-                <span className="input-group-text" id="basic-addon">
-                  <i className="fas fa-pencil-alt prefix"></i>
-                </span>
-              </div>
-              <textarea
-                className="form-control"
-                rows={7}
-                value={textDescription}
-                onChange={onDescriptionChange}
-                placeholder="Enter in point form or text description"
-              />
-            </MDBBox>
-            <MDBBtn
-              className="mt-3 ml-0 mr-0"
-              color="primary"
-              onClick={onSubmitClick}
+            <Formik
+              initialValues={initialValues}
+              onSubmit={async (values: ExperienceFormValues) => {
+                onSubmitClick(values);
+              }}
             >
-              Add Work Experience
-            </MDBBtn>
+              {({ isSubmitting, setFieldValue, values: { current } }) => (
+                <Form>
+                  <Field
+                    id="company"
+                    name="company"
+                    hint="Company"
+                    as={MDBInput}
+                  />
+                  <Field
+                    id="position"
+                    name="position"
+                    hint="Position"
+                    as={MDBInput}
+                  />
+                  <MDBBox className="align-middle mt-3">
+                    <label className="mr-3">Current?</label>
+                    <Field id="current" type="checkbox" name="current" />
+                  </MDBBox>
+                  <MDBBox className="d-inline-flex flex-column flex-md-row my-3">
+                    <MDBBox className="d-flex flex-column mr-3">
+                      <label className="mr-3">Start Date:</label>
+                      <Field id="startDate" name="startDate">
+                        {({ field }: { field: FieldInputProps<string> }) => {
+                          return (
+                            <DatePicker
+                              showYearDropdown
+                              dateFormat="MM/dd/yyyy"
+                              selected={
+                                (field.value && new Date(field.value)) || null
+                              }
+                              onChange={(date) => {
+                                setFieldValue(field.name, date);
+                              }}
+                            />
+                          );
+                        }}
+                      </Field>
+                    </MDBBox>
+                    {!current && (
+                      <MDBBox className="d-flex flex-column">
+                        <label className="mr-3">End Date:</label>
+                        <Field id="endDate" name="endDate">
+                          {({ field }: { field: FieldInputProps<string> }) => {
+                            return (
+                              <DatePicker
+                                showYearDropdown
+                                dateFormat="MM/dd/yyyy"
+                                selected={
+                                  (field.value && new Date(field.value)) || null
+                                }
+                                onChange={(date) => {
+                                  setFieldValue(field.name, date);
+                                }}
+                              />
+                            );
+                          }}
+                        </Field>
+                      </MDBBox>
+                    )}
+                  </MDBBox>
+                  <MDBBox className="d-flex flex-row w-100">
+                    <div className="input-group-prepend">
+                      <span className="input-group-text" id="basic-addon">
+                        <i className="fas fa-pencil-alt prefix"></i>
+                      </span>
+                    </div>
+                    <Field
+                      id="description"
+                      name="description"
+                      rows={7}
+                      as="textarea"
+                      className="w-100"
+                    ></Field>
+                  </MDBBox>
+                  <MDBBtn
+                    className="mt-3 ml-0 mr-0"
+                    color="primary"
+                    type="submit"
+                    disabled={isSubmitting}
+                  >
+                    Add Work Experience
+                  </MDBBtn>
+                </Form>
+              )}
+            </Formik>
           </MDBCardBody>
         </MDBCollapse>
       </MDBCard>

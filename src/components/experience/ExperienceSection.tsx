@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { MDBBox, MDBBtn, MDBIcon, MDBInput, MDBRow, MDBCol } from "mdbreact";
 import DatePicker from "react-datepicker";
-import { WorkBase, WorkDetails } from "../../types";
+import { WorkBase, WorkDetails, ExperienceFormValues } from "../../types";
 import { FirebaseContext, firestore } from "../FirebaseProvider";
 import CopyToClipboard from "react-copy-to-clipboard";
 import ExperienceHeader from "./ExperienceHeader";
@@ -29,6 +29,15 @@ const ExperienceSection: FunctionComponent<{}> = () => {
   const { user, onWorkSubmission, onWorkUpdate, onWorkDelete } = useContext(
     FirebaseContext
   );
+  const initialValues: ExperienceFormValues = {
+    company: "",
+    position: "",
+    startDate: new Date(),
+    endDate: new Date(),
+    current: false,
+    description: "",
+  };
+
   const [company, setCompany] = useState<string>("");
   const [position, setPosition] = useState<string>("");
   const [startDate, setStartDate] = useState<Date>(new Date());
@@ -145,18 +154,8 @@ const ExperienceSection: FunctionComponent<{}> = () => {
     }
   };
 
-  const handleSubmitClick = async (event: FormEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    const payload: WorkBase = {
-      company,
-      position,
-      startDate,
-      endDate,
-      current: isCurrent,
-      description: textDescription,
-    };
-
-    await onWorkSubmission(payload);
+  const handleSubmitClick = async (values: ExperienceFormValues) => {
+    await onWorkSubmission(values);
 
     resetState();
   };
@@ -187,19 +186,8 @@ const ExperienceSection: FunctionComponent<{}> = () => {
       <ExperienceHeader />
       <AddExperienceSection
         open={openAdd}
-        company={company}
-        position={position}
-        isCurrent={isCurrent}
-        startDate={startDate}
-        endDate={endDate}
-        textDescription={textDescription}
+        initialValues={initialValues}
         onOpenAddExperience={handleOpenAddExperience}
-        onCompanyChange={handleCompanyChange}
-        onPositionChange={handlePositionChange}
-        onCurrentChange={handleCurrentChange}
-        onStartDateChange={handleStartDateChange}
-        onEndDateChange={handleEndDateChange}
-        onDescriptionChange={handleDescriptionChange}
         onSubmitClick={handleSubmitClick}
       />
       {experiences.map(
