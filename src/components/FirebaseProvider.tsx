@@ -15,7 +15,7 @@ firebase.initializeApp(config);
 // export the references in case they will be used
 const auth = firebase.auth();
 const firestore = firebase.firestore();
-// const analytics = firebase.analytics();
+const analytics: firebase.analytics.Analytics = firebase.analytics();
 
 const FirebaseContext: Context<any> = createContext(null);
 
@@ -62,6 +62,7 @@ const FirebaseProvider = ({ children }: any): JSX.Element => {
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
     });
+    analytics.logEvent("link_created");
   };
 
   // handles adding a description to specific work experiences
@@ -83,6 +84,7 @@ const FirebaseProvider = ({ children }: any): JSX.Element => {
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
       });
+    analytics.logEvent("experience_created");
   };
 
   const onWorkUpdate = async (details: WorkDetails) => {
@@ -101,6 +103,7 @@ const FirebaseProvider = ({ children }: any): JSX.Element => {
         endDate: details.current ? null : details.endDate,
         lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
       });
+    analytics.logEvent("experience_updated");
   };
 
   const onWorkDelete = async (docId: string) => {
@@ -109,6 +112,7 @@ const FirebaseProvider = ({ children }: any): JSX.Element => {
     }
     const { uid }: { uid: string } = user;
     await userRef.doc(uid).collection("experiences").doc(docId).delete();
+    analytics.logEvent("experience_deleted");
   };
 
   // handles updating a link submission
@@ -124,6 +128,7 @@ const FirebaseProvider = ({ children }: any): JSX.Element => {
       url,
       lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
     });
+    analytics.logEvent("link_updated");
   };
 
   const onLinkDelete = async (docId: string) => {
@@ -134,6 +139,7 @@ const FirebaseProvider = ({ children }: any): JSX.Element => {
     const { uid }: { uid: string } = user;
 
     await userRef.doc(uid).collection("links").doc(docId).delete();
+    analytics.logEvent("link_deleted");
   };
 
   return (
@@ -159,6 +165,7 @@ export {
   auth,
   firebase,
   firestore,
+  analytics,
   FirebaseContext,
   FirebaseProvider,
   GoogleSignIn,

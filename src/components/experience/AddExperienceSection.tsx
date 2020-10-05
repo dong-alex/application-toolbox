@@ -11,6 +11,7 @@ import {
 import { AddExperienceProps, ExperienceFormValues } from "../../types";
 import { Field, FieldInputProps, Form, Formik } from "formik";
 
+
 const AddExperienceSection: FunctionComponent<AddExperienceProps> = ({
   onOpenAddExperience,
   open,
@@ -28,7 +29,7 @@ const AddExperienceSection: FunctionComponent<AddExperienceProps> = ({
             <Formik
               initialValues={initialValues}
               onSubmit={async (values: ExperienceFormValues) => {
-                onSubmitClick(values);
+                await onSubmitClick(values);
               }}
             >
               {({ isSubmitting, setFieldValue, values: { current } }) => (
