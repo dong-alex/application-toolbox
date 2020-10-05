@@ -1,4 +1,4 @@
-import { FormEvent } from "react";
+import { WorkDetails } from "./information";
 
 export type AddExperienceProps = {
   open: boolean;
@@ -22,3 +22,12 @@ export interface ExperienceFormValues {
   current: boolean;
   description: string;
 }
+
+export type ExperienceItemProps = {
+  details: WorkDetails;
+  activeField: boolean;
+  onEditClose: () => void;
+  onEditClick: (id: string) => void;
+  onDeleteClick: (id: string) => void;
+  onSaveChanges: (values: WorkDetails) => void;
+};

@@ -103,7 +103,7 @@ const AddExperienceSection: FunctionComponent<AddExperienceProps> = ({
                       rows={7}
                       as="textarea"
                       className="w-100"
-                    ></Field>
+                    />
                   </MDBBox>
                   <MDBBtn
                     className="mt-3 ml-0 mr-0"
