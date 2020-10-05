@@ -63,13 +63,14 @@ const ExperienceItem: FunctionComponent<ExperienceItemProps> = ({
                         return (
                           <DatePicker
                             showYearDropdown
-                            dateFormat="MM/dd/yyyy"
+                            dateFormat="MM/yyyy"
                             selected={
                               (field.value && new Date(field.value)) || null
                             }
                             onChange={(date) => {
                               setFieldValue(field.name, date);
                             }}
+                            showMonthYearPicker
                           />
                         );
                       }}
@@ -84,13 +85,14 @@ const ExperienceItem: FunctionComponent<ExperienceItemProps> = ({
                         return (
                           <DatePicker
                             showYearDropdown
-                            dateFormat="MM/dd/yyyy"
+                            dateFormat="MM/yyyy"
                             selected={
                               (field.value && new Date(field.value)) || null
                             }
                             onChange={(date) => {
                               setFieldValue(field.name, date);
                             }}
+                            showMonthYearPicker
                           />
                         );
                       }}
@@ -179,10 +181,11 @@ const ExperienceItem: FunctionComponent<ExperienceItemProps> = ({
             <label className="mr-3">Start Date:</label>
             <DatePicker
               showYearDropdown
-              dateFormat="MM/dd/yyyy"
+              dateFormat="MM/yyyy"
               maxDate={endDate}
               selected={startDate}
               onChange={() => {}}
+              showMonthYearPicker
               disabled
             />
           </div>
@@ -193,10 +196,11 @@ const ExperienceItem: FunctionComponent<ExperienceItemProps> = ({
               <label className="mr-3">End Date:</label>
               <DatePicker
                 showYearDropdown
-                dateFormat="MM/dd/yyyy"
+                dateFormat="MM/yyyy"
                 minDate={startDate}
                 selected={endDate}
                 onChange={() => {}}
+                showMonthYearPicker
                 disabled
               />
             </div>

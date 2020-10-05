@@ -11,7 +11,6 @@ import {
 import { AddExperienceProps, ExperienceFormValues } from "../../types";
 import { Field, FieldInputProps, Form, Formik } from "formik";
 
-
 const AddExperienceSection: FunctionComponent<AddExperienceProps> = ({
   onOpenAddExperience,
   open,
@@ -58,13 +57,14 @@ const AddExperienceSection: FunctionComponent<AddExperienceProps> = ({
                           return (
                             <DatePicker
                               showYearDropdown
-                              dateFormat="MM/dd/yyyy"
+                              dateFormat="MM/yyyy"
                               selected={
                                 (field.value && new Date(field.value)) || null
                               }
                               onChange={(date) => {
                                 setFieldValue(field.name, date);
                               }}
+                              showMonthYearPicker
                             />
                           );
                         }}
@@ -78,13 +78,14 @@ const AddExperienceSection: FunctionComponent<AddExperienceProps> = ({
                             return (
                               <DatePicker
                                 showYearDropdown
-                                dateFormat="MM/dd/yyyy"
+                                dateFormat="MM/yyyy"
                                 selected={
                                   (field.value && new Date(field.value)) || null
                                 }
                                 onChange={(date) => {
                                   setFieldValue(field.name, date);
                                 }}
+                                showMonthYearPicker
                               />
                             );
                           }}
