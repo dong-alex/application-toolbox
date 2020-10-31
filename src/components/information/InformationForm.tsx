@@ -19,6 +19,8 @@ const InformationForm: FunctionComponent<InformationFormProps> = ({
           <option value="Github">Github</option>
           <option value="LinkedIn">LinkedIn</option>
           <option value="Personal Website">Personal Website</option>
+          <option value="Project Website">Project Website</option>
+          <option value="Other">Other</option>
         </select>
       </MDBCol>
       <MDBCol md="4" className="px-md-0">
