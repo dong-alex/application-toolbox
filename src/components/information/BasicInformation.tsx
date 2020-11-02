@@ -48,7 +48,6 @@ const BasicInformation = () => {
   };
 
   const resetSubmissionState = () => {
-    setType("");
     setURL("");
     setErrorMessage("");
   };
